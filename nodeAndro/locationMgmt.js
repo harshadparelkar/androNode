@@ -6,45 +6,32 @@ var express    = require('express');        // call express
 var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
 var router = express.Router();
+var port = process.env.PORT || 8080;
 
-//configure app to use bodyParser()
-//this will let us get the data from a POST
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
-var port = process.env.PORT || 8080;        // set port
+app.post('/api/users', function(req, res) {
+    var user_id = req.body.id;
+    var token = req.body.token;
+    var geo = req.body.geo;
 
-
-
-
-app.get('/api', function(req, res) {
-    res.json({ message: 'hooray! welcome to our api!' });   
-    
+    res.send(user_id + ' ' + token + ' ' + geo);
 });
 
-// create a bear (accessed at POST http://localhost:8080/location)
-router.route('/location').post(function(req, res) {  
 
-    
-    var bear = new Bear();      // create a new instance of the Bear model
-    bear.name = req.body.name;  // set the bears name (comes from the request)
+//routes will go here
+app.get('/api/location', function(req, res) {
+  var user_id = req.param('id');
+  var token = req.param('token');
+  var geo = req.param('geo');  
 
-    // save the bear and check for errors
-    bear.save(function(err) {
-        if (err)
-            res.send(err);
-
-        res.json({ message: 'Bear created!' });
-    });
-    
+  res.send(user_id + ' ' + token + ' ' + geo);
 });
 
-//REGISTER OUR ROUTES -------------------------------
 
 
-
-//all of our routes will be prefixed with /api
-//app.use('/api', router);
-
+//start the server
 app.listen(port);
-console.log('Server is on port ' + port);
+console.log('Server started! At http://localhost:' + port);
+
