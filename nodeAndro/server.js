@@ -5,10 +5,11 @@
 var express    = require('express');        // call express
 var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
-//var router = express.Router();
+
 var port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
-var http = require('http');
 var ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var http = require('http');
+var router = express.Router();
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
